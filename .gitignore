@@ -1,0 +1,4 @@
+# Ignore Config files
+.env
+
+**/*_templ.go
