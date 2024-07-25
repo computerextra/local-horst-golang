@@ -1,0 +1,28 @@
+package pages
+
+import (
+	callbacks "github.com/computerextra/local-horst-golang/Callbacks"
+	layout "github.com/computerextra/local-horst-golang/template/Layout"
+)
+
+templ Auswahl(Mitarbeiter []callbacks.OnlyNames) {
+	@layout.Base("Einkaufseingabe") {
+		<h1>Asuwahl</h1>
+		<select name="id" id="id">
+			<option selected disabled hidden>Bitte Wählen...</option>
+			for _, x := range Mitarbeiter {
+				if x.Id.Valid && x.Name.Valid {
+					<option value={ x.Id.String }>{ x.Name.String }</option>
+				}
+			}
+		</select>
+		<button onclick="redirect()">Auswählen</button>
+		<script>
+            function redirect() {
+                const elem = document.querySelector("#id")
+                const id = elem.value
+                window.location.href = "/Eingabe/" + id
+            }
+        </script>
+	}
+}

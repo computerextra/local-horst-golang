@@ -1,15 +1,19 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	callbacks "github.com/computerextra/local-horst-golang/Callbacks"
 	"github.com/computerextra/local-horst-golang/gintemplrenderer"
 	pages "github.com/computerextra/local-horst-golang/template/Pages"
+	einkauf "github.com/computerextra/local-horst-golang/template/Pages/einkauf"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
+
+const dst = "/upload/"
 
 func setupRouter() *gin.Engine {
 	err := godotenv.Load()
@@ -45,9 +49,44 @@ func setupRouter() *gin.Engine {
 	if err != nil {
 		panic(err)
 	}
-
 	r.GET("/Liste", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "", pages.Einkauf(Einkauf))
+		c.HTML(http.StatusOK, "", einkauf.Einkauf(Einkauf))
+	})
+	r.GET("/Eingabe", func(c *gin.Context) {
+		Mitarbeiter, err := callbacks.GetNames()
+		if err != nil {
+			panic(err)
+		}
+		c.HTML(http.StatusOK, "", einkauf.Auswahl(Mitarbeiter))
+	})
+	r.GET("/Eingabe/:id", func(c *gin.Context) {
+		id := c.Param("id")
+		Mitarbeiter, err := callbacks.GetOne(id)
+		var e callbacks.Einkauf
+		for x := range Einkauf {
+			if Einkauf[x].MitarbeiterId.String == Mitarbeiter.Id.String {
+				e = Einkauf[x]
+			}
+		}
+		if err != nil {
+			panic(err)
+		}
+		c.HTML(http.StatusOK, "", einkauf.Eingabe(Mitarbeiter, e))
+	})
+	// Verarbeite FormData von Einkauf
+	r.POST("/Eingabe", func(c *gin.Context) {
+		form, _ := c.MultipartForm()
+		files := form.File["upload[]"]
+		for _, file := range files {
+			log.Println(file.Filename)
+
+			// Upload the file to specific dst.
+			c.SaveUploadedFile(file, dst)
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"status": "saved",
+		})
 	})
 
 	return r
@@ -55,6 +94,6 @@ func setupRouter() *gin.Engine {
 
 func main() {
 	r := setupRouter()
-	// Listen and Server in 0.0.0.0:8080
+	// Listen and Serve on 0.0.0.0:8080
 	r.Run(":8080")
 }

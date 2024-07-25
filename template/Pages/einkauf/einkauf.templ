@@ -68,13 +68,13 @@ templ Einkauf(Einkauf []callbacks.Einkauf) {
 											</td>
 											<td class="p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
 												<div class="grid screen:grid-cols-3 print:grid-cols-1">
-													if item.Bild1.Valid {
+													if item.Bild1.Valid && item.Bild1Date.Valid && strings.Split(item.Bild1Date.String, " ")[0] == strings.Split(time.Now().Format(time.RFC3339Nano), "T")[0] {
 														<img class="object-contain rounded-xl" height="150" width="150" style="color: transparent; max-height: 200px; width: auto;" src={ item.Bild1.String } alt={ "Bild1_" + item.Id.String }/>
 													}
-													if item.Bild2.Valid {
+													if item.Bild2.Valid && item.Bild2Date.Valid && strings.Split(item.Bild2Date.String, " ")[0] == strings.Split(time.Now().Format(time.RFC3339Nano), "T")[0] {
 														<img class="object-contain rounded-xl" height="150" width="150" style="color: transparent; max-height: 200px; width: auto;" src={ item.Bild2.String } alt={ "Bild2_" + item.Id.String }/>
 													}
-													if item.Bild3.Valid {
+													if item.Bild3.Valid && item.Bild3Date.Valid && strings.Split(item.Bild3Date.String, " ")[0] == strings.Split(time.Now().Format(time.RFC3339Nano), "T")[0] {
 														<img class="object-contain rounded-xl" height="150" width="150" style="color: transparent; max-height: 200px; width: auto;" src={ item.Bild3.String } alt={ "Bild3_" + item.Id.String }/>
 													}
 												</div>

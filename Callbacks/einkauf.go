@@ -3,9 +3,9 @@ package callbacks
 import (
 	"database/sql"
 	"fmt"
-	"os"
-	"strconv"
 	"time"
+
+	"github.com/computerextra/local-horst-golang/Callbacks/database"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -17,7 +17,7 @@ type Einkauf struct {
 	Geld          sql.NullString
 	Pfand         sql.NullString
 	Dinge         sql.NullString
-	mitarbeiterId sql.NullString
+	MitarbeiterId sql.NullString
 	Abgeschickt   sql.NullString
 	Bild1         sql.NullString
 	Bild2         sql.NullString
@@ -29,24 +29,10 @@ type Einkauf struct {
 	Email         sql.NullString
 }
 
-func getConnectionString() string {
-	mysql_user := os.Getenv("MYSQL_USER")
-	mysql_password := os.Getenv("MYSQL_PASS")
-	mysql_server := os.Getenv("MYSQL_SERVER")
-	mysql_db := os.Getenv("MYSQL_DB")
-
-	mysql_port, err := strconv.ParseInt(os.Getenv("MYSQL_PORT"), 0, 64)
-	if err != nil {
-		panic(err)
-	}
-
-	return fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", mysql_user, mysql_password, mysql_server, mysql_port, mysql_db)
-}
-
 func GetEinkauf() ([]Einkauf, error) {
 	var Einkäufe []Einkauf
 
-	connString := getConnectionString()
+	connString := database.GetConnectionString()
 
 	db, err := sql.Open("mysql", connString)
 	if err != nil {
@@ -66,7 +52,7 @@ func GetEinkauf() ([]Einkauf, error) {
 	for rows.Next() {
 		var einkauf Einkauf
 
-		if err := rows.Scan(&einkauf.Id, &einkauf.Paypal, &einkauf.Abonniert, &einkauf.Geld, &einkauf.Pfand, &einkauf.Dinge, &einkauf.mitarbeiterId, &einkauf.Abgeschickt, &einkauf.Bild1, &einkauf.Bild2, &einkauf.Bild3, &einkauf.Bild1Date, &einkauf.Bild2Date, &einkauf.Bild3Date, &einkauf.Name, &einkauf.Email); err != nil {
+		if err := rows.Scan(&einkauf.Id, &einkauf.Paypal, &einkauf.Abonniert, &einkauf.Geld, &einkauf.Pfand, &einkauf.Dinge, &einkauf.MitarbeiterId, &einkauf.Abgeschickt, &einkauf.Bild1, &einkauf.Bild2, &einkauf.Bild3, &einkauf.Bild1Date, &einkauf.Bild2Date, &einkauf.Bild3Date, &einkauf.Name, &einkauf.Email); err != nil {
 			return nil, fmt.Errorf("GetEinkauf: Row error: %s", err)
 		}
 
