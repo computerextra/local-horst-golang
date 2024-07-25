@@ -2,3 +2,7 @@
 .env
 
 **/*_templ.go
+
+node_modules
+
+/tmp/

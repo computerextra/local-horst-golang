@@ -1,0 +1,82 @@
+package pages
+
+import (
+	callbacks "github.com/computerextra/local-horst-golang/Callbacks"
+	layout "github.com/computerextra/local-horst-golang/template/Layout"
+	"strings"
+	"time"
+)
+
+templ Einkauf(Einkauf []callbacks.Einkauf) {
+	@layout.Base("Einkaufsliste") {
+		<div>
+			<h1 class="text-2xl text-center">Einkaufsliste</h1>
+			<table>
+				<thead>
+					<tr>
+						<th>Wer</th>
+						<th>Geld</th>
+						<th>Pfand</th>
+						<th>Abo</th>
+						<th>Was</th>
+						<th>Bilder</th>
+					</tr>
+				</thead>
+				<tbody>
+					for _, item := range Einkauf {
+						if item.Name.Valid && item.Dinge.Valid {
+							if (item.Abgeschickt.Valid && strings.Split(item.Abgeschickt.String, " ")[0] == strings.Split(time.Now().Format(time.RFC3339Nano), "T")[0]) || (item.Abonniert.Valid && item.Abonniert.Bool) {
+								<tr>
+									<td>
+										{ item.Name.String }
+									</td>
+									<td>
+										if item.Geld.Valid {
+											{ item.Geld.String }
+										}
+									</td>
+									<td>
+										if item.Pfand.Valid {
+											{ item.Pfand.String }
+										}
+									</td>
+									<td>
+										if item.Abonniert.Valid {
+											if item.Abonniert.Bool {
+												✔️
+											} else {
+												❌
+											}
+										}
+									</td>
+									<td>
+										if item.Dinge.Valid {
+											<ul>
+												for _, x := range strings.Split(item.Dinge.String, "\n") {
+													<li>{ x }</li>
+												}
+											</ul>
+										}
+									</td>
+									<td>
+										<div class="grid grid-cols-3">
+											if item.Bild1.Valid {
+												<img class="object-contain rounded-xl" height="150" width="150" style="max-height: 200px; width: auto;" src={ item.Bild1.String } alt={ "Bild1_" + item.Id.String }/>
+											}
+											if item.Bild2.Valid {
+												<img class="object-contain rounded-xl" height="150" width="150" style="max-height: 200px; width: auto;" src={ item.Bild2.String } alt={ "Bild2_" + item.Id.String }/>
+											}
+											if item.Bild3.Valid {
+												<img class="object-contain rounded-xl" height="150" width="150" style="max-height: 200px; width: auto;" src={ item.Bild3.String } alt={ "Bild3_" + item.Id.String }/>
+											}
+										</div>
+									</td>
+								</tr>
+							}
+						}
+					}
+				</tbody>
+			</table>
+		</div>
+	}
+}

@@ -1,0 +1,19 @@
+package pages
+
+import layout "github.com/computerextra/local-horst-golang/template/Layout"
+
+templ Home() {
+	@layout.Base("Home") {
+		<div>
+			<h1 class="text-2xl text-center">Wilkommen auf dem neuen Local Horst v10</h1>
+			<h2 class="text-xl text-center">
+				Entwickelt mit modernsten Technologien
+			</h2>
+			<div class="grid grid-cols-3 gap-8 w-[80%] mx-auto items-center mt-10">
+				<img class="object-contain rounded-xl h-35 w-auto" src="/assets/Images/go.png" alt="Golang Logo"/>
+				<img class="object-contain rounded-xl h-35 w-auto" src="/assets/Images/htmx.png" alt="HTMX Logo"/>
+				<img class="object-contain rounded-xl h-35 w-auto" src="/assets/Images/templ.svg" alt="Templ Logo"/>
+			</div>
+		</div>
+	}
+}
