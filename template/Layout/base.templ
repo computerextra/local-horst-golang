@@ -8,10 +8,10 @@ templ Base(title string) {
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<title>Local Horst v10 { title }</title>
 			<script src="https://unpkg.com/htmx.org@2.0.1"></script>
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.12.3/cdn.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.12.3/cdn.js" defer></script>
 			<link rel="stylesheet" href="style.css"/>
 		</head>
-		<body class="bg-slate-900 text-slate-300">
+		<body class="screen:bg-slate-900 screen:text-slate-300 print:bg-white print:text-black">
 			<div class="flex">
 				@Navigation(title)
 				<div class="flex-1 px-4 py-6 hidden sm:block">
