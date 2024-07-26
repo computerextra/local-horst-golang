@@ -1,60 +1,60 @@
-package pages
+package einkauf
 
 import (
-	callbacks "github.com/computerextra/local-horst-golang/Callbacks"
-	layout "github.com/computerextra/local-horst-golang/template/Layout"
+callbacks "github.com/computerextra/local-horst-golang/Callbacks"
+layout "github.com/computerextra/local-horst-golang/template/Layout"
 )
 
 templ Eingabe(Mitarbeiter callbacks.Mitarbeiter, einkauf callbacks.Einkauf) {
-	@layout.Base("Einkaufseingabe") {
-		<h1>Eingabe</h1>
-		<form action="/Eingabe" method="post">
-			<label for="Pfand">Pfand</label>
-			if einkauf.Pfand.Valid {
-				<input type="text" name="Pfand" id="Pfand" value={ einkauf.Pfand.String }/>
-			} else {
-				<input type="text" name="Pfand" id="Pfand"/>
-			}
-			<label for="Geld">Geld</label>
-			if einkauf.Geld.Valid {
-				<input type="text" name="Geld" id="Geld" value={ einkauf.Geld.String }/>
-			} else {
-				<input type="text" name="Geld" id="Geld"/>
-			}
-			<label for="Dinge">Dinge</label>
-			<textarea name="Dinge" id="Dinge" rows="20" cols="50">
-				if einkauf.Dinge.Valid {
-					{ einkauf.Dinge.String }
-				}
-			</textarea>
-			if einkauf.Bild1.Valid {
-				<div id="vorschau_bild1">
-					<img src={ einkauf.Bild1.String } alt=""/>
-					<button>Bild löschen</button>
-				</div>
-			} else {
-				<label for="Bild1">1. Bild</label>
-				<input type="file" name="Bild1" id="Bild1"/>
-			}
-			if einkauf.Bild2.Valid {
-				<div id="vorschau_bild2">
-					<img src={ einkauf.Bild2.String } alt=""/>
-					<button>Bild löschen</button>
-				</div>
-			} else {
-				<label for="Bild2">2. Bild</label>
-				<input type="file" name="Bild2" id="Bild2"/>
-			}
-			if einkauf.Bild3.Valid {
-				<div id="vorschau_bild3">
-					<img src={ einkauf.Bild3.String } alt=""/>
-					<button>Bild löschen</button>
-				</div>
-			} else {
-				<label for="Bild3">3. Bild</label>
-				<input type="file" name="Bild3" id="Bild3"/>
-			}
-			<input type="submit" value="Speichern"/>
-		</form>
-	}
+@layout.Base("Einkaufseingabe") {
+<h1>Eingabe</h1>
+<form action="/Eingabe" method="post">
+  <label for="Pfand">Pfand</label>
+  if einkauf.Pfand.Valid {
+  <input type="text" name="Pfand" id="Pfand" value={ einkauf.Pfand.String } />
+  } else {
+  <input type="text" name="Pfand" id="Pfand" />
+  }
+  <label for="Geld">Geld</label>
+  if einkauf.Geld.Valid {
+  <input type="text" name="Geld" id="Geld" value={ einkauf.Geld.String } />
+  } else {
+  <input type="text" name="Geld" id="Geld" />
+  }
+  <label for="Dinge">Dinge</label>
+  <textarea name="Dinge" id="Dinge" rows="20" cols="50">
+    if einkauf.Dinge.Valid {
+    { einkauf.Dinge.String }
+    }
+  </textarea>
+  if einkauf.Bild1.Valid {
+  <div id="vorschau_bild1">
+    <img src={ einkauf.Bild1.String } alt="" />
+    <button>Bild löschen</button>
+  </div>
+  } else {
+  <label for="Bild1">1. Bild</label>
+  <input type="file" name="Bild1" id="Bild1" />
+  }
+  if einkauf.Bild2.Valid {
+  <div id="vorschau_bild2">
+    <img src={ einkauf.Bild2.String } alt="" />
+    <button>Bild löschen</button>
+  </div>
+  } else {
+  <label for="Bild2">2. Bild</label>
+  <input type="file" name="Bild2" id="Bild2" />
+  }
+  if einkauf.Bild3.Valid {
+  <div id="vorschau_bild3">
+    <img src={ einkauf.Bild3.String } alt="" />
+    <button>Bild löschen</button>
+  </div>
+  } else {
+  <label for="Bild3">3. Bild</label>
+  <input type="file" name="Bild3" id="Bild3" />
+  }
+  <input type="submit" value="Speichern" />
+</form>
+}
 }
