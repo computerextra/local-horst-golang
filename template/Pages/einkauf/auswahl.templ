@@ -1,28 +1,30 @@
 package einkauf
 
 import (
-callbacks "github.com/computerextra/local-horst-golang/Callbacks"
-layout "github.com/computerextra/local-horst-golang/template/Layout"
+	callbacks "github.com/computerextra/local-horst-golang/Callbacks"
+	layout "github.com/computerextra/local-horst-golang/template/Layout"
 )
 
 templ Auswahl(Mitarbeiter []callbacks.OnlyNames) {
-@layout.Base("Einkaufseingabe") {
-<h1>Asuwahl</h1>
-<select name="id" id="id">
-  <option selected disabled hidden>Bitte Wählen...</option>
-  for _, x := range Mitarbeiter {
-  if x.Id.Valid && x.Name.Valid {
-  <option value={ x.Id.String }>{ x.Name.String }</option>
-  }
-  }
-</select>
-<button onclick="redirect()">Auswählen</button>
-<script>
+	@layout.Base("Einkaufseingabe") {
+		<div class="max-w-sm mx-auto mt-5">
+			<label for="id" class="block mb-2 text-sm font-medium text-white">Mitarbeiter auswahl</label>
+			<select name="id" id="id" class="bg-gray-700 border border-gray-600 placeholder-gray-400 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+				<option selected disabled hidden>Bitte Wählen...</option>
+				for _, x := range Mitarbeiter {
+					if x.Id.Valid && x.Name.Valid {
+						<option value={ x.Id.String }>{ x.Name.String }</option>
+					}
+				}
+			</select>
+			<button onclick="redirect()" class="mt-10 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800 text-white focus:outline-none focus:ring-4 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Auswählen</button>
+		</div>
+		<script>
   function redirect() {
     const elem = document.querySelector("#id")
     const id = elem.value
     window.location.href = "/Eingabe/" + id
   }
 </script>
-}
+	}
 }

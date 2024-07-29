@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -52,7 +53,7 @@ func setupRouter() *gin.Engine {
 	r.GET("/Liste", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "", einkauf.Einkauf(Einkauf))
 	})
-	r.GET("/Eingabe", func(c *gin.Context) {
+	r.GET("/Auswahl", func(c *gin.Context) {
 		Mitarbeiter, err := callbacks.GetNames()
 		if err != nil {
 			panic(err)
@@ -73,6 +74,19 @@ func setupRouter() *gin.Engine {
 		}
 		c.HTML(http.StatusOK, "", einkauf.Eingabe(Mitarbeiter, e))
 	})
+	// delete Image from Database
+	r.POST("/deleteimage/:id/:image", func(c *gin.Context) {
+		MitarbeiterId := c.Param("id")
+		image := c.Param("iamge")
+
+		// TODO: Bild aus Datenbank löschen!
+
+		log.Printf("Mitarbeiter: %s", MitarbeiterId)
+		log.Printf("Image: %s", image)
+
+		c.Redirect(http.StatusMovedPermanently, fmt.Sprintf("/Eingabe/%s", MitarbeiterId))
+	})
+
 	// Verarbeite FormData von Einkauf
 	r.POST("/Eingabe", func(c *gin.Context) {
 		form, _ := c.MultipartForm()
