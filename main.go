@@ -2,19 +2,16 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
+	"os"
 
-	callbacks "github.com/computerextra/local-horst-golang/Callbacks"
 	"github.com/computerextra/local-horst-golang/gintemplrenderer"
+	"github.com/computerextra/local-horst-golang/routes"
 	pages "github.com/computerextra/local-horst-golang/template/Pages"
-	einkauf "github.com/computerextra/local-horst-golang/template/Pages/einkauf"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
-
-const dst = "/upload/"
 
 func setupRouter() *gin.Engine {
 	err := godotenv.Load()
@@ -24,10 +21,20 @@ func setupRouter() *gin.Engine {
 
 	r := gin.Default()
 
+	mode := os.Getenv("MODE")
+	if mode == "PROD" {
+		gin.SetMode(gin.ReleaseMode)
+	} else {
+		fmt.Println("MODE not set in .env, for Production Build use PROD as Value")
+		gin.SetMode(gin.DebugMode)
+	}
+
 	// Tailwind CSS File
 	r.StaticFile("/style.css", "./output.css")
 	// Assets
 	r.Static("/assets", "./assets")
+	// Uploaded Images
+	r.Static("/upload", "./upload")
 
 	// Callbacks
 	r.GET("/ping", func(c *gin.Context) {
@@ -45,69 +52,19 @@ func setupRouter() *gin.Engine {
 		c.HTML(http.StatusOK, "", pages.Home())
 	})
 
-	// Get Einkauf
-	Einkauf, err := callbacks.GetEinkauf()
-	if err != nil {
-		panic(err)
-	}
-	r.GET("/Liste", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "", einkauf.Einkauf(Einkauf))
-	})
-	r.GET("/Auswahl", func(c *gin.Context) {
-		Mitarbeiter, err := callbacks.GetNames()
-		if err != nil {
-			panic(err)
-		}
-		c.HTML(http.StatusOK, "", einkauf.Auswahl(Mitarbeiter))
-	})
-	r.GET("/Eingabe/:id", func(c *gin.Context) {
-		id := c.Param("id")
-		Mitarbeiter, err := callbacks.GetOne(id)
-		var e callbacks.Einkauf
-		for x := range Einkauf {
-			if Einkauf[x].MitarbeiterId.String == Mitarbeiter.Id.String {
-				e = Einkauf[x]
-			}
-		}
-		if err != nil {
-			panic(err)
-		}
-		c.HTML(http.StatusOK, "", einkauf.Eingabe(Mitarbeiter, e))
-	})
-	// delete Image from Database
-	r.POST("/deleteimage/:id/:image", func(c *gin.Context) {
-		MitarbeiterId := c.Param("id")
-		image := c.Param("iamge")
-
-		// TODO: Bild aus Datenbank löschen!
-
-		log.Printf("Mitarbeiter: %s", MitarbeiterId)
-		log.Printf("Image: %s", image)
-
-		c.Redirect(http.StatusMovedPermanently, fmt.Sprintf("/Eingabe/%s", MitarbeiterId))
-	})
-
-	// Verarbeite FormData von Einkauf
-	r.POST("/Eingabe", func(c *gin.Context) {
-		form, _ := c.MultipartForm()
-		files := form.File["upload[]"]
-		for _, file := range files {
-			log.Println(file.Filename)
-
-			// Upload the file to specific dst.
-			c.SaveUploadedFile(file, dst)
-		}
-
-		c.JSON(http.StatusOK, gin.H{
-			"status": "saved",
-		})
-	})
+	routes.GetEinkaufRoutes(r)
 
 	return r
 }
 
 func main() {
 	r := setupRouter()
-	// Listen and Serve on 0.0.0.0:8080
-	r.Run(":8080")
+
+	var port = ""
+	port = os.Getenv("PORT")
+	if len(port) < 1 {
+		fmt.Println("No Port in .env specified. Using Port 8080 in Dev Mode")
+		port = "8080"
+	}
+	r.Run(fmt.Sprintf(":%s", port))
 }

@@ -14,26 +14,53 @@ func getUrl(id string, imageNumber string) string {
 templ Eingabe(Mitarbeiter callbacks.Mitarbeiter, einkauf callbacks.Einkauf) {
 	@layout.Base("Einkaufseingabe") {
 		<h1 class="text-center text-2xl">Eingabe</h1>
-		<form action="/Eingabe" method="post" class="max-w-sm mx-auto">
+		<form action={ templ.SafeURL(fmt.Sprintf("/EinkaufInput/%s", Mitarbeiter.Id.String)) } enctype="multipart/form-data" method="post" class="max-w-sm mx-auto">
 			<div class="mb-5">
 				<label for="Pfand" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pfand</label>
 				if einkauf.Pfand.Valid {
-					<input type="text" name="Pfand" id="Pfand" value={ einkauf.Pfand.String } class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+					<input
+						type="text"
+						name="Pfand"
+						id="Pfand"
+						value={ einkauf.Pfand.String }
+						class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+					/>
 				} else {
-					<input type="text" name="Pfand" id="Pfand" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+					<input
+						type="text"
+						name="Pfand"
+						id="Pfand"
+						class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+					/>
 				}
 			</div>
 			<div class="mb-5">
 				<label for="Geld" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Geld</label>
 				if einkauf.Geld.Valid {
-					<input type="text" name="Geld" id="Geld" value={ einkauf.Geld.String } class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+					<input
+						type="text"
+						name="Geld"
+						id="Geld"
+						value={ einkauf.Geld.String }
+						class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+					/>
 				} else {
-					<input type="text" name="Geld" id="Geld" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+					<input
+						type="text"
+						name="Geld"
+						id="Geld"
+						class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+					/>
 				}
 			</div>
 			<div class="mb-5">
 				<label for="Dinge" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dinge</label>
-				<textarea id="Dinge" name="Dinge" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+				<textarea
+					id="Dinge"
+					name="Dinge"
+					rows="4"
+					class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+				>
 					if einkauf.Dinge.Valid {
 						{ einkauf.Dinge.String }
 					}
@@ -49,13 +76,30 @@ templ Eingabe(Mitarbeiter callbacks.Mitarbeiter, einkauf callbacks.Einkauf) {
 							style="color: transparent; max-height: 200px; width: auto;"
 							src={ einkauf.Bild1.String }
 							alt={ "Bild1_" +
-                  einkauf.Id.String }
+        einkauf.Id.String }
 						/>
-						<button hx-post={ getUrl(Mitarbeiter.Id.String, "1") } hx-trigger="click" hx-target="#body" class="border mt-2 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5">Bild löschen<br/><span class="font-thin text-red-600">Achtung: Alle nicht gespeicherten Eingaben gehen verloren!</span></button>
+						<button
+							hx-post={ getUrl(Mitarbeiter.Id.String, "1") }
+							hx-trigger="click"
+							hx-target="#body"
+							class="border mt-2 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5"
+						>
+							Bild löschen
+							<br/>
+							<span
+								class="font-thin text-red-600"
+							>Achtung: Alle nicht gespeicherten Eingaben gehen verloren!</span>
+						</button>
 					</div>
 				} else {
 					<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="Bild1">Bild 1</label>
-					<input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="Bild1" id="Bild1" name="Bild1" type="file"/>
+					<input
+						class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+						aria-describedby="Bild1"
+						id="Bild1"
+						name="Bild1"
+						type="file"
+					/>
 				}
 			</div>
 			<div class="mb-5">
@@ -68,13 +112,30 @@ templ Eingabe(Mitarbeiter callbacks.Mitarbeiter, einkauf callbacks.Einkauf) {
 							style="color: transparent; max-height: 200px; width: auto;"
 							src={ einkauf.Bild2.String }
 							alt={ "Bild2_" +
-                  einkauf.Id.String }
+        einkauf.Id.String }
 						/>
-						<button hx-post={ getUrl(Mitarbeiter.Id.String, "3") } hx-trigger="click" hx-target="#body" class="border mt-2 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5">Bild löschen<br/><span class="font-thin text-red-600">Achtung: Alle nicht gespeicherten Eingaben gehen verloren!</span></button>
+						<button
+							hx-post={ getUrl(Mitarbeiter.Id.String, "2") }
+							hx-trigger="click"
+							hx-target="#body"
+							class="border mt-2 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5"
+						>
+							Bild löschen
+							<br/>
+							<span
+								class="font-thin text-red-600"
+							>Achtung: Alle nicht gespeicherten Eingaben gehen verloren!</span>
+						</button>
 					</div>
 				} else {
 					<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="Bild2">Bild 2</label>
-					<input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="Bild2" id="Bild2" name="Bild2" type="file"/>
+					<input
+						class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+						aria-describedby="Bild2"
+						id="Bild2"
+						name="Bild2"
+						type="file"
+					/>
 				}
 			</div>
 			<div class="mb-5">
@@ -87,34 +148,63 @@ templ Eingabe(Mitarbeiter callbacks.Mitarbeiter, einkauf callbacks.Einkauf) {
 							style="color: transparent; max-height: 200px; width: auto;"
 							src={ einkauf.Bild3.String }
 							alt={ "Bild3_" +
-                  einkauf.Id.String }
+        einkauf.Id.String }
 						/>
-						<button hx-post={ getUrl(Mitarbeiter.Id.String, "3") } hx-trigger="click" hx-target="#body" class="border mt-2 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5">Bild löschen<br/><span class="font-thin text-red-600">Achtung: Alle nicht gespeicherten Eingaben gehen verloren!</span></button>
+						<button
+							hx-post={ getUrl(Mitarbeiter.Id.String, "3") }
+							hx-trigger="click"
+							hx-target="#body"
+							class="border mt-2 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5"
+						>
+							Bild löschen
+							<br/>
+							<span
+								class="font-thin text-red-600"
+							>Achtung: Alle nicht gespeicherten Eingaben gehen verloren!</span>
+						</button>
 					</div>
 				} else {
 					<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="Bild3">Bild 3</label>
-					<input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="Bild3" id="Bild3" name="Bild3" type="file"/>
+					<input
+						class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+						aria-describedby="Bild3"
+						id="Bild3"
+						name="Bild3"
+						type="file"
+					/>
 				}
 			</div>
 			<div class="mb-5">
 				<label class="inline-flex items-center mb-5 cursor-pointer">
-					<input type="checkbox" id="Abo" name="Abo" value="" class="sr-only peer" data-abo={ strconv.FormatBool(einkauf.Abonniert.Bool) }/>
-					<div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+					<input
+						type="checkbox"
+						id="Abo"
+						name="Abo"
+						class="sr-only peer"
+						data-abo={ strconv.FormatBool(einkauf.Abonniert.Bool) }
+					/>
+					<div
+						class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+					></div>
 					<span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Abbonieren</span>
 				</label>
 			</div>
 			<div class="mb-5">
-				<input type="submit" value="Speichern" class="bg-blue-600 hover:bg-blue-700 focus:ring-blue-800 text-white focus:outline-none focus:ring-4 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"/>
+				<input
+					type="submit"
+					value="Speichern"
+					class="bg-blue-600 hover:bg-blue-700 focus:ring-blue-800 text-white focus:outline-none focus:ring-4 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+				/>
 			</div>
 		</form>
 		<script>
-      const elem = document.querySelector("#Abo")
-      const active = elem.dataset.abo;
-      if (active == "true") {
-        elem.checked = true
-      }else {
-        elem.checked = false
-      }
-    </script>
+  const elem = document.querySelector("#Abo")
+  const active = elem.dataset.abo;
+  if (active == "true") {
+    elem.checked = true
+  } else {
+    elem.checked = false
+  }
+</script>
 	}
 }
