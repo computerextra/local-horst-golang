@@ -56,7 +56,9 @@ func GetEinkäufe() ([]Einkauf, error) {
 	db.SetMaxOpenConns(10)
 	db.SetMaxIdleConns(10)
 
-	rows, err := db.Query("SELECT Einkauf.id, Einkauf.Paypal, Einkauf.Abonniert, Einkauf.Geld, Einkauf.Pfand, Einkauf.Dinge, Einkauf.mitarbeiterId, Einkauf.Abgeschickt, Einkauf.Bild1, Einkauf.Bild2, Einkauf.Bild3, Einkauf.Bild1Date, Einkauf.Bild2Date, Einkauf.Bild3Date, Mitarbeiter.Name, Mitarbeiter.Email FROM Einkauf INNER JOIN Mitarbeiter ON Einkauf.mitarbeiterId = Mitarbeiter.id")
+	rows, err := db.Query(
+		"SELECT Einkauf.id, Einkauf.Paypal, Einkauf.Abonniert, Einkauf.Geld, Einkauf.Pfand, Einkauf.Dinge, Einkauf.mitarbeiterId, Einkauf.Abgeschickt, Einkauf.Bild1, Einkauf.Bild2, Einkauf.Bild3, Einkauf.Bild1Date, Einkauf.Bild2Date, Einkauf.Bild3Date, Mitarbeiter.Name, Mitarbeiter.Email FROM Einkauf INNER JOIN Mitarbeiter ON Einkauf.mitarbeiterId = Mitarbeiter.id",
+	)
 	if err != nil {
 		return nil, fmt.Errorf("GetEinkauf: Query failed: %s", err)
 	}
@@ -89,7 +91,10 @@ func GetEinkauf(id string) (Einkauf, error) {
 	db.SetMaxOpenConns(10)
 	db.SetMaxIdleConns(10)
 
-	query := fmt.Sprintf("SELECT Einkauf.id, Einkauf.Paypal, Einkauf.Abonniert, Einkauf.Geld, Einkauf.Pfand, Einkauf.Dinge, Einkauf.mitarbeiterId, Einkauf.Abgeschickt, Einkauf.Bild1, Einkauf.Bild2, Einkauf.Bild3, Einkauf.Bild1Date, Einkauf.Bild2Date, Einkauf.Bild3Date, Mitarbeiter.Name, Mitarbeiter.Email FROM Einkauf INNER JOIN Mitarbeiter ON Einkauf.mitarbeiterId = Mitarbeiter.id WHERE Einkauf.mitarbeiterId='%s'", id)
+	query := fmt.Sprintf(
+		"SELECT Einkauf.id, Einkauf.Paypal, Einkauf.Abonniert, Einkauf.Geld, Einkauf.Pfand, Einkauf.Dinge, Einkauf.mitarbeiterId, Einkauf.Abgeschickt, Einkauf.Bild1, Einkauf.Bild2, Einkauf.Bild3, Einkauf.Bild1Date, Einkauf.Bild2Date, Einkauf.Bild3Date, Mitarbeiter.Name, Mitarbeiter.Email FROM Einkauf INNER JOIN Mitarbeiter ON Einkauf.mitarbeiterId = Mitarbeiter.id WHERE Einkauf.mitarbeiterId='%s'",
+		id,
+	)
 	rows, err := db.Query(query)
 	if err != nil {
 		return Einkauf, fmt.Errorf("GetEinkauf: Query failed: %s", err)
@@ -138,7 +143,15 @@ func SaveEinkauf(einkauf PostEinkauf) error {
 	stmt = stmt + " WHERE mitarbeiterId = ?"
 
 	// Exec
-	res, err := db.Exec(stmt, einkauf.Paypal, einkauf.Abonniert, einkauf.Geld, einkauf.Pfand, einkauf.Dinge, einkauf.MitarbeiterId)
+	res, err := db.Exec(
+		stmt,
+		einkauf.Paypal,
+		einkauf.Abonniert,
+		einkauf.Geld,
+		einkauf.Pfand,
+		einkauf.Dinge,
+		einkauf.MitarbeiterId,
+	)
 	if err != nil {
 		return err
 	}
@@ -164,7 +177,11 @@ func DeleteImage(imageId string, mitarbeiterId string) error {
 	db.SetMaxOpenConns(10)
 	db.SetMaxIdleConns(10)
 
-	stmt := fmt.Sprintf("UPDATE Einkauf SET Bild%s = NULL WHERE mitarbeiterID='%s'", imageId, mitarbeiterId)
+	stmt := fmt.Sprintf(
+		"UPDATE Einkauf SET Bild%s = NULL WHERE mitarbeiterID='%s'",
+		imageId,
+		mitarbeiterId,
+	)
 	fmt.Println(stmt)
 	// Exec
 	res, err := db.Exec(stmt)

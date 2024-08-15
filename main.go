@@ -53,6 +53,7 @@ func setupRouter() *gin.Engine {
 	})
 
 	routes.GetEinkaufRoutes(r)
+	routes.GetGeburtstagRoute(r)
 
 	return r
 }

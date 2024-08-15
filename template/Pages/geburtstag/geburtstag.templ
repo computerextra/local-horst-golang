@@ -1,0 +1,90 @@
+package geburtstag
+
+import (
+	"fmt"
+	callbacks "github.com/computerextra/local-horst-golang/Callbacks"
+	layout "github.com/computerextra/local-horst-golang/template/Layout"
+	"github.com/goodsign/monday"
+	"sort"
+	"strings"
+	"time"
+)
+
+func GetBirthday(date time.Time) string {
+	Geburtstag := fmt.Sprintf("%s", monday.Format(date, monday.ShortFormatsByLocale[monday.LocaleDeDE], monday.LocaleDeDE))
+	return fmt.Sprintf("%v.%v", strings.Split(Geburtstag, ".")[0], strings.Split(Geburtstag, ".")[1])
+}
+
+func SortGeburtstage(items []callbacks.GebRes) []callbacks.GebRes {
+	var copy = items
+	sort.Slice(copy, func(i, j int) bool {
+		return copy[i].Geburtstag.Before(copy[j].Geburtstag)
+	})
+	return copy
+}
+
+templ Geburtstag(Vergangen []callbacks.GebRes, Heute []callbacks.GebRes, Zukunft []callbacks.GebRes) {
+	// Sort Array 
+	@layout.Base("Geburtstage") {
+		<div>
+			<h1>Geburtstage</h1>
+			if len(Vergangen) > 0 {
+				<h2>Vergangen</h2>
+				<table>
+					<thead>
+						<tr>
+							<th>Wer</th>
+							<th>Wann</th>
+						</tr>
+					</thead>
+					<tbody>
+						for _, item := range SortGeburtstage(Vergangen) {
+							<tr>
+								<td>{ item.Name }</td>
+								<td>{ GetBirthday(item.Geburtstag) }</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			}
+			if len(Heute) > 0 {
+				<h2>HEUTE</h2>
+				<table>
+					<thead>
+						<tr>
+							<th>Wer</th>
+							<th>Wann</th>
+						</tr>
+					</thead>
+					<tbody>
+						for _, item := range SortGeburtstage(Heute) {
+							<tr>
+								<td>{ item.Name }</td>
+								<td>{ GetBirthday(item.Geburtstag) }</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			}
+			if len(Zukunft) > 0 {
+				<h2>Zukunft</h2>
+				<table>
+					<thead>
+						<tr>
+							<th>Wer</th>
+							<th>Wann</th>
+						</tr>
+					</thead>
+					<tbody>
+						for _, item := range SortGeburtstage(Zukunft) {
+							<tr>
+								<td>{ item.Name }</td>
+								<td>{ GetBirthday(item.Geburtstag) }</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			}
+		</div>
+	}
+}
