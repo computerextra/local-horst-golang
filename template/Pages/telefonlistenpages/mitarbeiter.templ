@@ -1,0 +1,136 @@
+package telefonlistenpages
+
+import (
+	"fmt"
+	callbacks "github.com/computerextra/local-horst-golang/Callbacks"
+	layout "github.com/computerextra/local-horst-golang/template/Layout"
+)
+
+templ MitarbeiterListe(Mitarbeiter []callbacks.Mitarbeiter) {
+	@layout.Base("Mitarbeiter Liste") {
+		<div>
+			// TODO: Htmx Backend Actions für Live Search
+			<input
+				name="name"
+				id="name"
+				hx-post="/mitarbeiter-search"
+				hx-trigger="keyup changed delay:500ms"
+				hx-target="#MitarbeiterTable"
+				placeholder="Suche ..."
+			/>
+			<table>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Gruppe</th>
+						<th>Tel 1</th>
+						<th>Tel 2</th>
+						<th>Homeoffice</th>
+						<th>Tel. Priv.</th>
+						<th>Tel. Bus.</th>
+						<th>Mob. Priv.</th>
+						<th>Mob. Bus.</th>
+						<th>Mail</th>
+						<th>Azubi</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody id="MitarbeiterTable">
+					for _, mitarbeiter := range Mitarbeiter {
+						<tr>
+							<td>{ mitarbeiter.Name.String }</td>
+							<td>
+								if mitarbeiter.Gruppenwahl.Valid {
+									{ mitarbeiter.Gruppenwahl.String }
+								} else {
+									-
+								}
+							</td>
+							<td>
+								if mitarbeiter.InternTelefon1.Valid {
+									{ mitarbeiter.InternTelefon1.String }
+								} else {
+									-
+								}
+							</td>
+							<td>
+								if mitarbeiter.InternTelefon2.Valid {
+									{ mitarbeiter.InternTelefon2.String }
+								} else {
+									-
+								}
+							</td>
+							<td>
+								if mitarbeiter.HomeOffice.Valid {
+									{ mitarbeiter.HomeOffice.String }
+								} else {
+									-
+								}
+							</td>
+							<td>
+								if mitarbeiter.FestnetzPrivat.Valid {
+									<a href={ templ.SafeURL(fmt.Sprintf("tel:%s", mitarbeiter.FestnetzPrivat.String)) }>
+										{ mitarbeiter.FestnetzPrivat.String }
+									</a>
+								} else {
+									-
+								}
+							</td>
+							<td>
+								if mitarbeiter.FestnetzAlternativ.Valid {
+									<a href={ templ.SafeURL(fmt.Sprintf("tel:%s", mitarbeiter.FestnetzAlternativ.String)) }>
+										{ mitarbeiter.FestnetzAlternativ.String }
+									</a>
+								} else {
+									-
+								}
+							</td>
+							<td>
+								if mitarbeiter.MobilPrivat.Valid {
+									<a href={ templ.SafeURL(fmt.Sprintf("tel:%s", mitarbeiter.MobilPrivat.String)) }>
+										{ mitarbeiter.MobilPrivat.String }
+									</a>
+								} else {
+									-
+								}
+							</td>
+							<td>
+								if mitarbeiter.MobilBusiness.Valid {
+									<a href={ templ.SafeURL(fmt.Sprintf("tel:%s", mitarbeiter.MobilBusiness.String)) }>
+										{ mitarbeiter.MobilBusiness.String }
+									</a>
+								} else {
+									-
+								}
+							</td>
+							<td>
+								if mitarbeiter.Email.Valid {
+									<a href={ templ.SafeURL(fmt.Sprintf("mailto:%s", mitarbeiter.Email.String)) }>
+										{ mitarbeiter.Email.String }
+									</a>
+								} else {
+									-
+								}
+							</td>
+							<td>
+								if mitarbeiter.Azubi.Valid {
+									if mitarbeiter.Azubi.Bool {
+										✔️
+									} else {
+										❌
+									}
+								} else {
+									❌
+								}
+							</td>
+							<td>
+								// TODO: Link anpassen!
+								<a href="#">Edit</a>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	}
+}

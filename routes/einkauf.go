@@ -84,7 +84,6 @@ func GetEinkaufRoutes(r *gin.Engine) {
 	// Verarbeite FormData von Einkauf
 	r.POST("/EinkaufInput/:id", func(c *gin.Context) {
 		MitarbeiterId := c.Param("id")
-		fmt.Println(MitarbeiterId)
 		var bindFormData BindFormData
 
 		if err := c.ShouldBind(&bindFormData); err != nil {
