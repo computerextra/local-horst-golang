@@ -1,0 +1,35 @@
+package archiv
+
+import (
+	callbacks "github.com/computerextra/local-horst-golang/Callbacks"
+	layout "github.com/computerextra/local-horst-golang/template/Layout"
+)
+
+templ Archiv(SearchResults []callbacks.Pdf) {
+	@layout.Base("CE Archiv") {
+		<div>
+			<h1 class="text-2xl">CE Archiv</h1>
+			<div class="relative p-12 w-full sm:max-w-2xl sm:mx-auto">
+				<div class="overflow-hidden z-0 rounded-full relative p-3">
+					<form role="form" action="/Archive" method="get" class="relative flex z-50 bg-white rounded-full">
+						<input type="text" placeholder="Hier Suchbegriff eingeben" name="search" id="search" class="rounded-full flex-1 px-6 py-4 text-gray-700 focus:outline-none"/>
+						<button class="bg-indigo-500 text-white rounded-full font-semibold px-8 py-4 hover:bg-indigo-400 focus:bg-indigo-600 focus:outline-none">Suchen</button>
+					</form>
+					<div class="glow glow-1 z-10 bg-pink-400 absolute"></div>
+					<div class="glow glow-2 z-20 bg-purple-400 absolute"></div>
+					<div class="glow glow-3 z-30 bg-yellow-400 absolute"></div>
+					<div class="glow glow-4 z-40 bg-blue-400 absolute"></div>
+				</div>
+			</div>
+			<div>
+				<ul>
+					for _, res := range SearchResults {
+						<li>
+							<a id={ res.Id } href="#">{ res.Title }</a>
+						</li>
+					}
+				</ul>
+			</div>
+		</div>
+	}
+}

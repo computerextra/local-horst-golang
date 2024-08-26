@@ -10,21 +10,32 @@ templ Geburtstag(Vergangen []callbacks.GebRes, Heute []callbacks.GebRes, Zukunft
 	// Sort Array 
 	@layout.Base("Geburtstage") {
 		<div class="ms-20">
-			<h1 class="text-2xl">Geburtstage</h1>
-			if len(Heute) > 0 {
-				<div class="m-4 p-4 border border-red-500 w-max">
-					<h2 class="text-2xl mb-4">HEUTE</h2>
-					@Components.BirthdayTable([]string{"Wer", "Wann"}, Heute)
+			<h1 class="text-2xl mb-10">Geburtstage</h1>
+			<div
+				class="grid gap-4"
+				style="grid-template-columns: repeat(3, minmax(0, 1fr));"
+			>
+				<div>
+					<h2 class="text-2xl mb-4">Heute</h2>
+					if len(Heute) > 0 {
+						<div class="m-4 p-4 border border-red-500 w-max">
+							@Components.BirthdayTable([]string{"Wer", "Wann"}, Heute)
+						</div>
+					}
 				</div>
-			}
-			if len(Vergangen) > 0 {
-				<h2 class="text-xl my-4">Vergangen</h2>
-				@Components.BirthdayTable([]string{"Wer", "Wann"}, Vergangen)
-			}
-			if len(Zukunft) > 0 {
-				<h2 class="text-xl my-4">Zukunft</h2>
-				@Components.BirthdayTable([]string{"Wer", "Wann"}, Zukunft)
-			}
+				<div>
+					if len(Vergangen) > 0 {
+						<h2 class="text-xl my-4">Vergangen</h2>
+						@Components.BirthdayTable([]string{"Wer", "Wann"}, Vergangen)
+					}
+				</div>
+				<div>
+					if len(Zukunft) > 0 {
+						<h2 class="text-xl my-4">Zukunft</h2>
+						@Components.BirthdayTable([]string{"Wer", "Wann"}, Zukunft)
+					}
+				</div>
+			</div>
 		</div>
 	}
 }

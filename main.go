@@ -55,6 +55,7 @@ func setupRouter() *gin.Engine {
 	routes.GetEinkaufRoutes(r)
 	routes.GetGeburtstagRoute(r)
 	routes.GetTelefonlistenRoutes(r)
+	routes.GetArchiveRoute(r)
 
 	return r
 }
