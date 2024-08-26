@@ -64,9 +64,17 @@ func GetEinkaufRoutes(r *gin.Engine) {
 		MitarbeiterId := c.Param("id")
 		image := c.Param("image")
 
+		// get Imagepath
+		imagePath, err := callbacks.GetImagePath(image, MitarbeiterId)
+		if err != nil {
+			panic(err)
+		}
+
 		if err := callbacks.DeleteImage(image, MitarbeiterId); err != nil {
 			panic(err)
 		}
+
+		os.Remove(dst + filepath.Base(imagePath))
 
 		c.Redirect(http.StatusMovedPermanently, fmt.Sprintf("/Eingabe/%s", MitarbeiterId))
 	})
@@ -106,7 +114,12 @@ func GetEinkaufRoutes(r *gin.Engine) {
 				if err := c.SaveUploadedFile(bindFormData.Bild1, dst+filepath.Base(bindFormData.Bild1.Filename)); err != nil {
 					fmt.Printf("Fehler: %s", err)
 				}
-				einkauf.Bild1 = uploadFolder + filepath.Base(bindFormData.Bild1.Filename)
+				length := len(strings.Split(bindFormData.Bild1.Filename, "."))
+				format := strings.Split(bindFormData.Bild1.Filename, ".")[length-1]
+				newName := fmt.Sprintf("%s-Bild1.%s", MitarbeiterId, format)
+				os.Rename(dst+filepath.Base(bindFormData.Bild1.Filename), dst+filepath.Base(newName))
+				einkauf.Bild1 = uploadFolder + filepath.Base(newName)
+
 			} else {
 				einkauf.Bild1 = ""
 			}
@@ -119,7 +132,11 @@ func GetEinkaufRoutes(r *gin.Engine) {
 				if err := c.SaveUploadedFile(bindFormData.Bild2, dst+filepath.Base(bindFormData.Bild2.Filename)); err != nil {
 					fmt.Printf("Fehler: %s", err)
 				}
-				einkauf.Bild2 = uploadFolder + filepath.Base(bindFormData.Bild2.Filename)
+				length := len(strings.Split(bindFormData.Bild2.Filename, "."))
+				format := strings.Split(bindFormData.Bild2.Filename, ".")[length-1]
+				newName := fmt.Sprintf("%s-Bild2.%s", MitarbeiterId, format)
+				os.Rename(dst+filepath.Base(bindFormData.Bild2.Filename), dst+filepath.Base(newName))
+				einkauf.Bild2 = uploadFolder + filepath.Base(newName)
 			} else {
 				einkauf.Bild2 = ""
 			}
@@ -132,7 +149,11 @@ func GetEinkaufRoutes(r *gin.Engine) {
 				if err := c.SaveUploadedFile(bindFormData.Bild3, dst+filepath.Base(bindFormData.Bild3.Filename)); err != nil {
 					fmt.Printf("Fehler: %s", err)
 				}
-				einkauf.Bild3 = uploadFolder + filepath.Base(bindFormData.Bild3.Filename)
+				length := len(strings.Split(bindFormData.Bild3.Filename, "."))
+				format := strings.Split(bindFormData.Bild3.Filename, ".")[length-1]
+				newName := fmt.Sprintf("%s-Bild3.%s", MitarbeiterId, format)
+				os.Rename(dst+filepath.Base(bindFormData.Bild3.Filename), dst+filepath.Base(newName))
+				einkauf.Bild1 = uploadFolder + filepath.Base(newName)
 			} else {
 				einkauf.Bild3 = ""
 			}

@@ -196,3 +196,36 @@ func DeleteImage(imageId string, mitarbeiterId string) error {
 
 	return nil
 }
+
+func GetImagePath(imageId string, mitarbeiterId string) (string, error) {
+	connString := database.GetConnectionString()
+
+	db, err := sql.Open("mysql", connString)
+	if err != nil {
+		return "", err
+	}
+	defer db.Close()
+
+	db.SetConnMaxLifetime(time.Minute * 3)
+	db.SetMaxOpenConns(10)
+	db.SetMaxIdleConns(10)
+
+	stmt := fmt.Sprintf(
+		"SELECT Bild%s FROM Einkauf WHERE mitarbeiterID='%s'",
+		imageId,
+		mitarbeiterId,
+	)
+
+	rows, err := db.Query(stmt)
+	if err != nil {
+		return "", err
+	}
+	var path string
+	for rows.Next() {
+		if err := rows.Scan(&path); err != nil {
+			return "", err
+		}
+	}
+
+	return path, nil
+}
