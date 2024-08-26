@@ -66,7 +66,7 @@ func GetGeburtstage() ([]GebRes, error) {
 		RealbirthdayTimeDate := time.Date(
 			time.Now().Year(),
 			time.Month(Month),
-			Day,
+			Day+1,
 			0,
 			0,
 			0,

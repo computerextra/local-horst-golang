@@ -11,7 +11,16 @@ import (
 
 func SortDemArray(items []callbacks.GebRes, zustand string) []callbacks.GebRes {
 	var alled []callbacks.GebRes
-	heute := time.Now()
+	heute := time.Date(
+		time.Now().Year(),
+		time.Now().Month(),
+		time.Now().Day(),
+		0,
+		0,
+		0,
+		0,
+		time.UTC,
+	)
 
 	for _, item := range items {
 		if zustand == "Vergangen" {
