@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fmt"
 	"net/http"
 
 	callbacks "github.com/computerextra/local-horst-golang/Callbacks"
@@ -16,16 +17,23 @@ func GetArchiveRoute(r *gin.Engine) {
 	r.GET("/Archive/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "", archiv.Archiv([]callbacks.Pdf{}))
 	})
-	r.GET("/Archive/:search", func(c *gin.Context) {
-		search := c.Param("search")
-
-		Results, err := callbacks.SearchArchive(search)
+	r.POST("/Archive/Search", func(c *gin.Context) {
+		var bindData SearchFormData
+		if err := c.ShouldBind(&bindData); err != nil {
+			c.String(http.StatusBadRequest, fmt.Sprintf("err: %s", err.Error()))
+			return
+		}
+		Results, err := callbacks.SearchArchive(bindData.Search)
 		if err != nil {
 			panic(err)
 		}
+		var Response string = ""
 
-		c.HTML(http.StatusOK, "", archiv.Archiv(Results))
+		for _, x := range Results {
+			Response = fmt.Sprintf("%s<li><a href=\"\">%s</a></li>", Response, x.Title)
+		}
 
+		c.String(http.StatusOK, Response)
 	})
 
 }

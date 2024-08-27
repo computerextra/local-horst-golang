@@ -7,11 +7,11 @@ import (
 
 templ Archiv(SearchResults []callbacks.Pdf) {
 	@layout.Base("CE Archiv") {
-		<div>
+		<div class="">
 			<h1 class="text-2xl">CE Archiv</h1>
 			<div class="relative p-12 w-full sm:max-w-2xl sm:mx-auto">
 				<div class="overflow-hidden z-0 rounded-full relative p-3">
-					<form role="form" action="/Archive" method="get" class="relative flex z-50 bg-white rounded-full">
+					<form role="form" hx-target="#Results" hx-post="/Archive/Search" class="relative flex z-50 bg-white rounded-full">
 						<input type="text" placeholder="Hier Suchbegriff eingeben" name="search" id="search" class="rounded-full flex-1 px-6 py-4 text-gray-700 focus:outline-none"/>
 						<button class="bg-indigo-500 text-white rounded-full font-semibold px-8 py-4 hover:bg-indigo-400 focus:bg-indigo-600 focus:outline-none">Suchen</button>
 					</form>
@@ -21,14 +21,8 @@ templ Archiv(SearchResults []callbacks.Pdf) {
 					<div class="glow glow-4 z-40 bg-blue-400 absolute"></div>
 				</div>
 			</div>
-			<div>
-				<ul>
-					for _, res := range SearchResults {
-						<li>
-							<a id={ res.Id } href="#">{ res.Title }</a>
-						</li>
-					}
-				</ul>
+			<div class="min-h-[10rem] h-[10rem] max-h-[10rem] w-full border border-yellow-400">
+				<ul class="h-96 max-h-96 overflow-auto" id="Results"></ul>
 			</div>
 		</div>
 	}
